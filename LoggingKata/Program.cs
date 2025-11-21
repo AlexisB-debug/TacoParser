@@ -19,16 +19,16 @@ namespace LoggingKata
 
             // Use File.ReadAllLines(path) to grab all the lines from your csv file. 
             // Optional: Log an error if you get 0 lines and a warning if you get 1 line
-            var lines = File.ReadAllLines(csvPath);
+            string[] lines = File.ReadAllLines(csvPath);
 
             // This will display the first item in your lines array
             logger.LogInfo($"Lines: {lines[0]}");
 
             // Create a new instance of your TacoParser class
-            var parser = new TacoParser();
+            TacoParser parser = new TacoParser();
 
             // Use the Select LINQ method to parse every line in lines collection
-            var locations = lines.Select(parser.Parse).ToArray();
+            ITrackable[] locations = lines.Select(parser.Parse).ToArray();
 
   
             // Complete the Parse method in TacoParser class first and then START BELOW ----------
