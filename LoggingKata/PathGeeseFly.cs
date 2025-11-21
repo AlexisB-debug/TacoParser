@@ -4,30 +4,17 @@ namespace LoggingKata;
 
 public static class PathGeeseFly
 {
-    public static double[] OriginVector(double originLatitude, double originLongitude)
+    public static double[] VectorBlueprint(double latitude, double longitude)
     {
-        double originLatitudeToRadians = (Math.PI * originLatitude) / 180.0f;
-        double originLongitudeToRadians = (Math.PI * originLongitude) / 180.0f;
+        double latitudeToRadians = (Math.PI * latitude) / 180;
+        double longitudeToRadians = (Math.PI * longitude) / 180;
 
-        double x = Math.Cos(originLatitudeToRadians) * Math.Cos(originLongitudeToRadians);
-        double y = Math.Cos(originLongitudeToRadians) * Math.Sin(originLatitudeToRadians);
-        double z = Math.Sin(originLongitudeToRadians);
+        double x = Math.Cos(latitudeToRadians) * Math.Cos(longitudeToRadians);
+        double y = Math.Cos(longitudeToRadians) * Math.Sin(latitudeToRadians);
+        double z = Math.Sin(longitudeToRadians);
 
-        double[] OriginVector = new double[] { x, y, z };
-        return OriginVector;
-    }
-
-    public static double[] DestinationVector(double destinationLatitude, double destinationLongitude)
-    {
-        double destinationLatitudeToRadians = (Math.PI * destinationLatitude) / 180.0f;
-        double destinationLongitudeToRadians = (Math.PI * destinationLongitude) / 180.0f;
-
-        double x = Math.Cos(destinationLatitudeToRadians) * Math.Cos(destinationLongitudeToRadians);
-        double y = Math.Cos(destinationLongitudeToRadians) * Math.Sin(destinationLatitudeToRadians);
-        double z = Math.Sin(destinationLongitudeToRadians);
-
-        double[] DestinationVector = new double[] { x, y, z };
-        return DestinationVector;
+        double[] vector = new double[] { x, y, z };
+        return vector;
     }
 
     public static double Flyway(double[] OriginVector, double[] DestinationVector)
@@ -35,6 +22,7 @@ public static class PathGeeseFly
         double dotProduct = OriginVector[0] * DestinationVector[0] + OriginVector[1] * DestinationVector[1] +
                             OriginVector[2] * DestinationVector[2];
         double centralAngle = Math.Acos((dotProduct / Math.Pow(6371000, 2)));
-        return centralAngle;
+        double arcLength = 6371000 * centralAngle;
+        return arcLength;
     }
 }

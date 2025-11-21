@@ -80,8 +80,7 @@ namespace LoggingKata
                 // originCoordinate.Latitude = originLocation.Location.Latitude;
                 // originCoordinate.Longitude = originLocation.Location.Longitude;
                 double[] OriginVector = new double[3];
-                OriginVector =
-                    PathGeeseFly.OriginVector(originLocation.Location.Latitude, originLocation.Location.Longitude);
+                OriginVector = PathGeeseFly.VectorBlueprint(originLocation.Location.Latitude, originLocation.Location.Longitude);
                 for (int destinationCounter = 0; destinationCounter < locations.Length; destinationCounter++)
                 {
                     ITrackable destinationLocation = locations[destinationCounter];
@@ -89,7 +88,7 @@ namespace LoggingKata
                     // destinationCoordinate.Latitude = destinationLocation.Location.Latitude;
                     // destinationCoordinate.Longitude = destinationLocation.Location.Longitude;
                     double[] DestinationVector = new double[3];
-                    DestinationVector = PathGeeseFly.DestinationVector(destinationLocation.Location.Latitude,
+                    DestinationVector = PathGeeseFly.VectorBlueprint(destinationLocation.Location.Latitude,
                         destinationLocation.Location.Longitude);
 
                     if (PathGeeseFly.Flyway(OriginVector, DestinationVector) > distance)
