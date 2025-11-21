@@ -21,6 +21,16 @@ namespace LoggingKata
             // Optional: Log an error if you get 0 lines and a warning if you get 1 line
             string[] lines = File.ReadAllLines(csvPath);
 
+            if (lines.Length == 0)
+            {
+                logger.LogError($"Empty CSV file");
+            }
+
+            if (lines.Length == 1)
+            {
+                logger.LogWarning($"CSV file is missing a line of input");
+            }
+
             // This will display the first item in your lines array
             logger.LogInfo($"Lines: {lines[0]}");
 
@@ -35,14 +45,17 @@ namespace LoggingKata
 
             // TODO: Create two `ITrackable` variables with initial values of `null`. 
             // These will be used to store your two Taco Bells that are the farthest from each other.
-            
+            ITrackable originTacoBell = null;
+            ITrackable destinationTacoBell = null;
+
             // TODO: Create a `double` variable to store the distance
+            decimal distance = 0;
 
             // TODO: Add the Geolocation library to enable location comparisons: using GeoCoordinatePortable;
             // Look up what methods you have access to within this library.
 
             // NESTED LOOPS SECTION----------------------------
-            
+
             // FIRST FOR LOOP -
             // TODO: Create a loop to go through each item in your collection of locations.
             // This loop will let you select one location at a time to act as the "starting point" or "origin" location.
@@ -60,13 +73,35 @@ namespace LoggingKata
             // TODO: Now, still being inside the scope of the second for loop, compare the two locations using `.GetDistanceTo()` method, which returns a double.
             // If the distance is greater than the currently saved distance, update the distance variable and the two `ITrackable` variables you set above.
 
+            for (int originCounter = 0; originCounter < locations.Length; originCounter = originCounter + 1)
+            {
+                var originLocation = locations[originCounter];
+                var originCoordinate = new PathGeeseFly();
+                originCoordinate.Latitude = originLocation.Location.Latitude;
+                originCoordinate.Longitude = originLocation.Location.Longitude;
+                for (int destinationCounter = 0; destinationCounter < locations.Length; destinationCounter++)
+                {
+                    var destinationLocation = locations[destinationCounter];
+                    var destinationCoordinate = new PathGeeseFly();
+                    destinationCoordinate.Latitude = destinationLocation.Location.Latitude;
+                    destinationCoordinate.Longitude = destinationLocation.Location.Longitude;
+
+                    if (PathGeeseFly(originCoordinate, destinationCoordinate) > distance)
+                    {
+                        distance = PathGeeseFly(originCoordinate, destinationCoordinate);
+                        originTacoBell = originLocation;
+                        destinationTacoBell = destinationLocation;
+                    }
+                }
+            }
+
             // NESTED LOOPS SECTION COMPLETE ---------------------
 
             // Once you've looped through everything, you've found the two Taco Bells farthest away from each other.
             // Display these two Taco Bell locations to the console.
+            logger.logInfo($"{originTacoBell.Name} & {destinationTacoBell.Name}");
 
 
-            
         }
     }
 }
