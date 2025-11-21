@@ -6,7 +6,7 @@
     public class TacoParser
     {
         readonly ILog logger = new TacoLogger();
-        
+
         public ITrackable Parse(string line)
         {
             logger.LogInfo("Begin parsing");
@@ -19,28 +19,28 @@
             {
                 // Log error message and return null
                 logger.LogWarning("Incomplete data: a cell contains three columns");
-                return null; 
+                return null;
             }
 
             // TODO: Grab the latitude from your array at index 0
             // You're going to need to parse your string as a `double`
             // which is similar to parsing a string as an `int`
-            decimal latitude = decimal.Parse(cells[0]);
-            
-            
+            double latitude = double.Parse(cells[0]);
+
+
             // TODO: Grab the longitude from your array at index 1
             // You're going to need to parse your string as a `double`
             // which is similar to parsing a string as an `int`
-            decimal longitude = decimal.Parse(cells[1]);
-            
-            
+            double longitude = double.Parse(cells[1]);
+
+
             // TODO: Grab the name from your array at index 2
             string name = cells[2];
-            
+
 
             // TODO: Create a TacoBell class
             // that conforms to ITrackable
-            
+
             // TODO: Create an instance of the Point Struct
             // TODO: Set the values of the point correctly (Latitude and Longitude)
             Point point = new Point();

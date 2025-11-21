@@ -40,7 +40,7 @@ namespace LoggingKata
             // Use the Select LINQ method to parse every line in lines collection
             ITrackable[] locations = lines.Select(parser.Parse).ToArray();
 
-  
+
             // Complete the Parse method in TacoParser class first and then START BELOW ----------
 
             // TODO: Create two `ITrackable` variables with initial values of `null`. 
@@ -49,7 +49,7 @@ namespace LoggingKata
             ITrackable destinationTacoBell = null;
 
             // TODO: Create a `double` variable to store the distance
-            decimal distance = 0;
+            double distance = 0;
 
             // TODO: Add the Geolocation library to enable location comparisons: using GeoCoordinatePortable;
             // Look up what methods you have access to within this library.
@@ -76,19 +76,25 @@ namespace LoggingKata
             for (int originCounter = 0; originCounter < locations.Length; originCounter = originCounter + 1)
             {
                 ITrackable originLocation = locations[originCounter];
-                PathGeeseFly originCoordinate = new PathGeeseFly();
-                originCoordinate.Latitude = originLocation.Location.Latitude;
-                originCoordinate.Longitude = originLocation.Location.Longitude;
+                // PathGeeseFly originCoordinate = new PathGeeseFly();
+                // originCoordinate.Latitude = originLocation.Location.Latitude;
+                // originCoordinate.Longitude = originLocation.Location.Longitude;
+                double[] OriginVector = new double[3];
+                OriginVector =
+                    PathGeeseFly.OriginVector(originLocation.Location.Latitude, originLocation.Location.Longitude);
                 for (int destinationCounter = 0; destinationCounter < locations.Length; destinationCounter++)
                 {
                     ITrackable destinationLocation = locations[destinationCounter];
-                    PathGeeseFly destinationCoordinate = new PathGeeseFly();
-                    destinationCoordinate.Latitude = destinationLocation.Location.Latitude;
-                    destinationCoordinate.Longitude = destinationLocation.Location.Longitude;
+                    // PathGeeseFly destinationCoordinate = new PathGeeseFly();
+                    // destinationCoordinate.Latitude = destinationLocation.Location.Latitude;
+                    // destinationCoordinate.Longitude = destinationLocation.Location.Longitude;
+                    double[] DestinationVector = new double[3];
+                    DestinationVector = PathGeeseFly.DestinationVector(destinationLocation.Location.Latitude,
+                        destinationLocation.Location.Longitude);
 
-                    if (PathGeeseFly(originCoordinate, destinationCoordinate) > distance)
+                    if (PathGeeseFly.Flyway(OriginVector, DestinationVector) > distance)
                     {
-                        distance = PathGeeseFly(originCoordinate, destinationCoordinate);
+                        distance = PathGeeseFly.Flyway(OriginVector, DestinationVector);
                         originTacoBell = originLocation;
                         destinationTacoBell = destinationLocation;
                     }
@@ -99,7 +105,7 @@ namespace LoggingKata
 
             // Once you've looped through everything, you've found the two Taco Bells farthest away from each other.
             // Display these two Taco Bell locations to the console.
-            logger.logInfo($"{originTacoBell.Name} & {destinationTacoBell.Name}");
+            logger.LogInfo($"The Taco Bells farthest apart: {originTacoBell.Name} & {destinationTacoBell.Name}");
         }
     }
 }
