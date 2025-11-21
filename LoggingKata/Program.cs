@@ -75,14 +75,14 @@ namespace LoggingKata
 
             for (int originCounter = 0; originCounter < locations.Length; originCounter = originCounter + 1)
             {
-                var originLocation = locations[originCounter];
-                var originCoordinate = new PathGeeseFly();
+                ITrackable originLocation = locations[originCounter];
+                PathGeeseFly originCoordinate = new PathGeeseFly();
                 originCoordinate.Latitude = originLocation.Location.Latitude;
                 originCoordinate.Longitude = originLocation.Location.Longitude;
                 for (int destinationCounter = 0; destinationCounter < locations.Length; destinationCounter++)
                 {
-                    var destinationLocation = locations[destinationCounter];
-                    var destinationCoordinate = new PathGeeseFly();
+                    ITrackable destinationLocation = locations[destinationCounter];
+                    PathGeeseFly destinationCoordinate = new PathGeeseFly();
                     destinationCoordinate.Latitude = destinationLocation.Location.Latitude;
                     destinationCoordinate.Longitude = destinationLocation.Location.Longitude;
 
@@ -100,8 +100,6 @@ namespace LoggingKata
             // Once you've looped through everything, you've found the two Taco Bells farthest away from each other.
             // Display these two Taco Bell locations to the console.
             logger.logInfo($"{originTacoBell.Name} & {destinationTacoBell.Name}");
-
-
         }
     }
 }
