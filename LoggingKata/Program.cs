@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.IO;
-using GeoCoordinatePortable;
 
 namespace LoggingKata
 {
@@ -19,30 +18,43 @@ namespace LoggingKata
 
             // Use File.ReadAllLines(path) to grab all the lines from your csv file. 
             // Optional: Log an error if you get 0 lines and a warning if you get 1 line
-            var lines = File.ReadAllLines(csvPath);
+            string[] lines = File.ReadAllLines(csvPath);
+
+            if (lines.Length == 0)
+            {
+                logger.LogError($"Empty CSV file");
+            }
+
+            if (lines.Length == 1)
+            {
+                logger.LogWarning($"CSV file is missing a line of input");
+            }
 
             // This will display the first item in your lines array
             logger.LogInfo($"Lines: {lines[0]}");
 
             // Create a new instance of your TacoParser class
-            var parser = new TacoParser();
+            TacoParser parser = new TacoParser();
 
             // Use the Select LINQ method to parse every line in lines collection
-            var locations = lines.Select(parser.Parse).ToArray();
+            ITrackable[] locations = lines.Select(parser.Parse).ToArray();
 
-  
+
             // Complete the Parse method in TacoParser class first and then START BELOW ----------
 
             // TODO: Create two `ITrackable` variables with initial values of `null`. 
             // These will be used to store your two Taco Bells that are the farthest from each other.
-            
+            ITrackable originTacoBell = null;
+            ITrackable destinationTacoBell = null;
+
             // TODO: Create a `double` variable to store the distance
+            double distance = 0;
 
             // TODO: Add the Geolocation library to enable location comparisons: using GeoCoordinatePortable;
             // Look up what methods you have access to within this library.
 
             // NESTED LOOPS SECTION----------------------------
-            
+
             // FIRST FOR LOOP -
             // TODO: Create a loop to go through each item in your collection of locations.
             // This loop will let you select one location at a time to act as the "starting point" or "origin" location.
@@ -60,13 +72,32 @@ namespace LoggingKata
             // TODO: Now, still being inside the scope of the second for loop, compare the two locations using `.GetDistanceTo()` method, which returns a double.
             // If the distance is greater than the currently saved distance, update the distance variable and the two `ITrackable` variables you set above.
 
+            for (int originCounter = 0; originCounter < locations.Length; originCounter = originCounter + 1)
+            {
+                ITrackable originLocation = locations[originCounter];
+                double[] OriginVector = PathGeeseFly.VectorBlueprint(originLocation.Location.Latitude,
+                    originLocation.Location.Longitude);
+
+                for (int destinationCounter = 0; destinationCounter < locations.Length; destinationCounter++)
+                {
+                    ITrackable destinationLocation = locations[destinationCounter];
+                    double[] DestinationVector = PathGeeseFly.VectorBlueprint(destinationLocation.Location.Latitude,
+                        destinationLocation.Location.Longitude);
+
+                    if (PathGeeseFly.Flyway(OriginVector, DestinationVector) > distance)
+                    {
+                        distance = PathGeeseFly.Flyway(OriginVector, DestinationVector);
+                        originTacoBell = originLocation;
+                        destinationTacoBell = destinationLocation;
+                    }
+                }
+            }
+
             // NESTED LOOPS SECTION COMPLETE ---------------------
 
             // Once you've looped through everything, you've found the two Taco Bells farthest away from each other.
             // Display these two Taco Bell locations to the console.
-
-
-            
+            logger.LogInfo($"The Taco Bells farthest apart: {originTacoBell.Name} & {destinationTacoBell.Name}");
         }
     }
 }
